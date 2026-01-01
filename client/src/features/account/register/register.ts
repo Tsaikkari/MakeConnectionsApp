@@ -4,10 +4,11 @@ import { RegisterCreds } from '../../../types/user';
 import { AccountService } from '../../../core/services/account-service';
 
 import { Router } from '@angular/router';
+import { TextInput } from "../../../shared/text-input/text-input";
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TextInput],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -15,18 +16,18 @@ export class Register {
   private accountService = inject(AccountService);
   private router = inject(Router);
   private fb = inject(FormBuilder)
-  cancelRegister = output<boolean>();
   protected creds = {} as RegisterCreds;
   protected credentialsForm: FormGroup;
   protected profileForm: FormGroup;
   protected currentStep = signal(1);
   protected validationErrors = signal<string[]>([]);
+  cancelRegister = output<boolean>();
 
   constructor() {
     this.credentialsForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       displayName: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(12)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     });
 
@@ -35,6 +36,7 @@ export class Register {
       city: ['', Validators.required],
       country: ['', Validators.required],
     })
+
     this.credentialsForm.controls['password'].valueChanges.subscribe(() => {
       this.credentialsForm.controls['confirmPassword'].updateValueAndValidity();
     })

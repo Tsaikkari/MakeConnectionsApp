@@ -15,6 +15,7 @@ export class AccountService {
 
   register(creds: RegisterCreds) {
     return this.http.post<User>(this.baseUrl + 'account/register', creds,
+      // to get back the refreshToken cookie
       { withCredentials: true }).pipe(
         tap(user => {
           if (user) {
@@ -37,6 +38,7 @@ export class AccountService {
       )
   }
 
+  // to persist login
   refreshToken() {
     return this.http.post<User>(this.baseUrl + 'account/refresh-token', {},
       { withCredentials: true })
@@ -53,7 +55,7 @@ export class AccountService {
             this.logout()
           }
         })
-    }, 14 * 24 * 60 * 60 * 1000) // 14 days
+    }, 5 * 60 * 1000) // 5 min
   }
 
   setCurrentUser(user: User) {

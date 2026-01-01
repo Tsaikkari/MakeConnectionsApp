@@ -4,9 +4,11 @@ using DAL.Helpers;
 using DAL.Interfaces;
 using api.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
+    [Authorize]
     public class MembersController(IMemberRepository memberRepository) : BaseApiController
     {
         [HttpGet]

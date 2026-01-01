@@ -90,7 +90,9 @@ public class AccountController(UserManager<User> userManager, ITokenService toke
 
         var cookieOptions = new CookieOptions
         {
+            // not accessible by JS
             HttpOnly = true,
+            // sent over https only
             Secure = true,
             SameSite = SameSiteMode.Strict,
             Expires = DateTime.UtcNow.AddDays(7)
@@ -103,6 +105,7 @@ public class AccountController(UserManager<User> userManager, ITokenService toke
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
     {
+        var userId = User.GetMemberId();
         await userManager.Users
             .Where(x => x.Id == User.GetMemberId())
             .ExecuteUpdateAsync(setters => setters
